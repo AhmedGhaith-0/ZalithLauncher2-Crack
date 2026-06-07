@@ -52,8 +52,7 @@ jobs:
       - name: Build APK for ${{ matrix.arch }}
         run: |
           chmod +x gradlew
-          ./gradlew ZalithLauncher:assemble${{ inputs.variant }} -Darch=${{ matrix.arch }}
-
+          ./gradlew ZalithLauncher:assemble${{ inputs.variant }} -Darch=${{ matrix.arch }} --stacktrace
       - name: Upload Release APK for ${{ matrix.arch }}
         if: inputs.variant == 'Release'
         continue-on-error: true
