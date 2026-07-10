@@ -39,6 +39,7 @@ import com.movtery.zalithlauncher.game.account.microsoft.getTokenResponse
 import com.movtery.zalithlauncher.game.account.microsoft.microsoftAuthAsync
 import com.movtery.zalithlauncher.game.account.microsoft.toLocal
 import com.movtery.zalithlauncher.ui.screens.content.elements.MicrosoftLoginOperation
+import com.movtery.zalithlauncher.path.URL_USER_AGENT
 import com.movtery.zalithlauncher.utils.copyText
 import com.movtery.zalithlauncher.utils.logging.Logger
 import com.movtery.zalithlauncher.utils.network.toLocal
@@ -385,6 +386,7 @@ fun tryGetFullServerUrl(baseUrl: String): String {
             (URL(url).openConnection() as HttpURLConnection).apply {
                 connectTimeout = 5000
                 readTimeout = 5000
+                setRequestProperty("User-Agent", URL_USER_AGENT)
             }
 
         var conn: HttpURLConnection? = null

@@ -25,9 +25,12 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.request.HttpRequestPipeline
+import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -35,6 +38,10 @@ import java.util.concurrent.TimeUnit
 
 val URL_USER_AGENT: String = "${BuildKeys.LAUNCHER_SHORT_NAME}/Android_${BuildConfig.VERSION_NAME}"
 val TIME_OUT = TimeUnit.SECONDS.toMillis(30L)
+
+const val HOST_CURSEFORGE_API = "api.curseforge.com"
+const val HOST_CURSEFORGE_EDGE = "edge.forgecdn.net"
+
 const val URL_MCMOD: String = "https://www.mcmod.cn/"
 const val URL_MINECRAFT_VERSION_REPOS: String = "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json"
 const val URL_MINECRAFT_ASSETS_INDEX: String = "https://launchermeta.mojang.com/v1/packages"
@@ -70,9 +77,58 @@ val GLOBAL_CLIENT = HttpClient(CIO) {
     expectSuccess = true
 
     defaultRequest {
-        headers {
-            append(HttpHeaders.UserAgent, URL_USER_AGENT)
+        header(HttpHeaders.UserAgent, URL_USER_AGENT)
+    }
+}.apply {
+    requestPipeline.intercept(HttpRequestPipeline.State) {
+        // 检查 host 是否为 CurseForge
+        // 自动添加 CurseForge 的 api 密钥
+        val host = context.url.host
+        if (host == HOST_CURSEFORGE_API || host == HOST_CURSEFORGE_EDGE) {
+            val apiKey = BuildKeys.CURSEFORGE_API
+            if (apiKey.isNotBlank()) {
+                context.header("x-api-key", apiKey)
+            }
         }
+    }
+}
+
+/**
+ * An [Interceptor] for CurseForge API requests.
+ *
+ * It automatically injects the `x-api-key` header when the request host matches
+ * [HOST_CURSEFORGE_API] or [HOST_CURSEFORGE_EDGE], provided the API key is not blank.
+ */
+private val CURSEFORGE_INTERCEPTOR = Interceptor { chain ->
+    val request = chain.request()
+    val host = request.url.host
+    if (host == HOST_CURSEFORGE_API || host == HOST_CURSEFORGE_EDGE) {
+        val apiKey = BuildKeys.CURSEFORGE_API
+        if (apiKey.isNotBlank()) {
+            val newRequest = request.newBuilder()
+                .header("x-api-key", apiKey)
+                .build()
+            return@Interceptor chain.proceed(newRequest)
+        }
+    }
+    chain.proceed(request)
+}
+
+/**
+ * An [Interceptor] that ensures the [URL_USER_AGENT] header is present on every request.
+ *
+ * If a request already carries a User-Agent header (set by [createRequestBuilder] or
+ * similar), this interceptor is a no-op — avoiding duplicate headers.
+ */
+private val USER_AGENT_INTERCEPTOR = Interceptor { chain ->
+    val request = chain.request()
+    if (request.header("User-Agent") != null) {
+        chain.proceed(request)
+    } else {
+        val newRequest = request.newBuilder()
+            .header("User-Agent", URL_USER_AGENT)
+            .build()
+        chain.proceed(newRequest)
     }
 }
 
@@ -94,6 +150,8 @@ fun createOkHttpClient(): OkHttpClient = createOkHttpClientBuilder().build()
 fun createOkHttpClientBuilder(action: (OkHttpClient.Builder) -> Unit = { }): OkHttpClient.Builder {
     return OkHttpClient.Builder()
         .callTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
+        .addInterceptor(CURSEFORGE_INTERCEPTOR)
+        .addInterceptor(USER_AGENT_INTERCEPTOR)
         .apply(action)
 }
 
@@ -112,6 +170,8 @@ val DOWNLOAD_OKHTTP_CLIENT: OkHttpClient by lazy {
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
         .retryOnConnectionFailure(true)
+        .addInterceptor(CURSEFORGE_INTERCEPTOR)
+        .addInterceptor(USER_AGENT_INTERCEPTOR)
         .build()
         // 注意：不设置 callTimeout，因为文件大小差异极大
         // 协程层的 withTimeout 提供整体兜底保护

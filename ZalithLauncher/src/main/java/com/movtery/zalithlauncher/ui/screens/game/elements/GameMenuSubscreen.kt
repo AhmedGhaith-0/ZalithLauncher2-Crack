@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Icon
@@ -57,6 +58,7 @@ import com.movtery.zalithlauncher.ui.components.MenuSliderLayout
 import com.movtery.zalithlauncher.ui.components.MenuState
 import com.movtery.zalithlauncher.ui.components.MenuSwitchButton
 import com.movtery.zalithlauncher.ui.components.MenuTextButton
+import com.movtery.zalithlauncher.ui.components.lazyScrollWithBar
 import com.movtery.zalithlauncher.ui.control.HotbarRule
 import com.movtery.zalithlauncher.ui.control.gyroscope.isGyroscopeAvailable
 import com.movtery.zalithlauncher.ui.theme.cardColor
@@ -196,8 +198,10 @@ private fun GameActionContent(
     //检查陀螺仪是否可用
     val context = LocalContext.current
 
+    val listState = rememberLazyListState()
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.lazyScrollWithBar(listState),
+        state = listState,
         contentPadding = PaddingValues(all = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -342,8 +346,10 @@ private fun ControlOverview(
     onManageJoystick: () -> Unit,
     onEditLayout: () -> Unit
 ) {
+    val listState = rememberLazyListState()
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.lazyScrollWithBar(listState),
+        state = listState,
         contentPadding = PaddingValues(all = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -436,8 +442,10 @@ private fun ControlMouse(
     color: Color = cardColor(false),
     contentColor: Color = onCardColor(),
 ) {
+    val listState = rememberLazyListState()
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.lazyScrollWithBar(listState),
+        state = listState,
         contentPadding = PaddingValues(all = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -544,8 +552,10 @@ private fun ControlGamepad(
     color: Color = cardColor(false),
     contentColor: Color = onCardColor(),
 ) {
+    val listState = rememberLazyListState()
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.lazyScrollWithBar(listState),
+        state = listState,
         contentPadding = PaddingValues(all = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -650,8 +660,10 @@ private fun ControlGesture(
     color: Color = cardColor(false),
     contentColor: Color = onCardColor(),
 ) {
+    val listState = rememberLazyListState()
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.lazyScrollWithBar(listState),
+        state = listState,
         contentPadding = PaddingValues(all = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -828,8 +840,10 @@ private fun ControlGyroscope(
         isGyroscopeAvailable(context = context)
     }
 
+    val listState = rememberLazyListState()
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.lazyScrollWithBar(listState),
+        state = listState,
         contentPadding = PaddingValues(all = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {

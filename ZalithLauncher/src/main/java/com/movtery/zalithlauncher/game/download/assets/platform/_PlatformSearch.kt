@@ -53,7 +53,6 @@ private val mirrorModrinthSearcher = ModrinthSearcher(
 private val curseForgeSearcher = CurseForgeSearcher()
 private val mirrorCurseForgeSearcher = CurseForgeSearcher(
     api = MCIM_CURSEFORGE_API,
-    apiKey = null, //不向镜像源提供 api key
     source = "MCIM CurseForge"
 )
 

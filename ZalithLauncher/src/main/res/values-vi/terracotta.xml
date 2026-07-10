@@ -8,7 +8,7 @@
     <string name="terracotta_back">Lui về</string>
     <string name="terracotta_enable">Bật chơi mạng</string>
     <string name="terracotta_difficulty_easiest">Mạng đẹp như mơ: Đợi tí là oke!</string>
-    <string name="terracotta_difficulty_simple">Mạng tạm ổn: Sẽ hơi lâu một tẹo...</string>
+    <string name="terracotta_difficulty_simple">Mạng ổn: kết nối sẽ mất chút thời gian…</string>
     <string name="terracotta_difficulty_medium">Mạng cà khịa: Đã bật chế độ chống nhiễu, nhưng dễ toang</string>
     <string name="terracotta_difficulty_tough">Mạng như "cục súc": Chống nhiễu cũng chưa chắc cứu được</string>
     <string name="terracotta_difficulty_estimate_only">Tỉ lệ thành công chỉ mang tính chất tham khảo, hên xui nha.</string>

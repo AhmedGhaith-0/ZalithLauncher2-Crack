@@ -128,7 +128,6 @@
     <string name="error_network_unreachable">Network unavailable</string>
     <string name="error_connection_failed">Failed to connect to server</string>
     <string name="error_parse_failed">Failed to parse data</string>
-
     <string name="error_bad_request">(%s) The server could not understand the request</string>
     <string name="error_unauthorized">(%s) Please check your credentials and try again</string>
     <string name="error_forbidden">(%s) You do not have permission to access this resource</string>
@@ -439,7 +438,6 @@
     <string name="game_styles_joystick_hide_when_gamepad">Hide When Using Gamepad</string>
     <string name="game_styles_save_failed">Failed to Save Style</string>
     <string name="game_saponsorship_finished_game">The launcher has successfully launched the game %s times! If you find it useful, please consider supporting the developer! :)</string>
-
     <string name="game_vulkan_check_title">Vulkan Check</string>
     <string name="game_vulkan_check_text">Check whether your device supports running Minecraft 26.2+ with Vulkan. Results are for reference only.</string>
     <string name="game_vulkan_check_version">Vulkan version: %s</string>
@@ -1286,7 +1284,6 @@
     <string name="vibrate_kind_double_click">Double Click</string>
     <string name="vibrate_kind_heavy_click">Heavy Click</string>
     <string name="vibrate_kind_tick">Tick</string>
-
     <string name="festivals_new_year">Happy New Year!</string>
     <string name="festivals_april_fools">Happy April Fools\' Day!</string>
     <string name="festivals_christmas">Merry Christmas!</string>

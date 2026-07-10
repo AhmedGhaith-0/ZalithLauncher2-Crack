@@ -435,8 +435,8 @@ fun VersionExportScreen(
 
     val cBackToMainScreen by rememberUpdatedState(backToMainScreen)
     DisposableEffect(key) {
-        val listener = object : suspend (List<Version>) -> Unit {
-            override suspend fun invoke(versions: List<Version>) {
+        val listener = object : suspend () -> Unit {
+            override suspend fun invoke() {
                 cBackToMainScreen()
             }
         }
